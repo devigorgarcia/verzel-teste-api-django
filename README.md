@@ -1,1 +1,0 @@
-# verzel-teste-api-django
