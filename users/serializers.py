@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from .models import User
 
@@ -17,6 +18,11 @@ class UserSerializer(serializers.ModelSerializer):
         return User.objects.create_user(**validated_data)
 
 
-class UserLoginSerializer(serializers.Serializer):
-    username = serializers.CharField(write_only=True)
-    password = serializers.CharField(write_only=True)
+class MyCustomTokenSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user: User):
+        token = super().get_token(user)
+
+        token["is_admin"] = user.is_superuser
+
+        return token

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 import os
+from datetime import timedelta
 from pathlib import Path
 
 import dj_database_url
@@ -45,15 +46,17 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
-THIRD_PARTY_APPS = ["rest_framework", "rest_framework.authtoken"]
+THIRD_PARTY_APPS = ["rest_framework", "rest_framework.authtoken", "corsheaders"]
 
 MY_APPS = [
     "users",
+    "vehicles",
 ]
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.TokenAuthentication",
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
 }
 
@@ -67,8 +70,10 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
+CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = "_verzel.urls"
 
@@ -161,3 +166,7 @@ if DATABASE_URL:
         default=DATABASE_URL, conn_max_age=500, ssl_require=True
     )
     DATABASES["default"].update(db_from_env)
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=5),
+}
