@@ -46,7 +46,7 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
-THIRD_PARTY_APPS = ["rest_framework", "rest_framework.authtoken", "corsheaders"]
+THIRD_PARTY_APPS = ["rest_framework", "rest_framework.authtoken", "corsheaders", 'drf_spectacular']
 
 MY_APPS = [
     "users",
@@ -58,6 +58,7 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.TokenAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + MY_APPS
@@ -169,4 +170,12 @@ if DATABASE_URL:
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(hours=5),
+}
+
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Verzel API',
+    'DESCRIPTION': 'Api para CRUD de Veiculos',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
 }

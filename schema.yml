@@ -1,0 +1,359 @@
+openapi: 3.0.3
+info:
+  title: Verzel API
+  version: 1.0.0
+  description: Api para CRUD de Veiculos
+paths:
+  /api/login/:
+    post:
+      operationId: api_login_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MyCustomToken'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MyCustomToken'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MyCustomToken'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MyCustomToken'
+          description: ''
+  /api/users/:
+    get:
+      operationId: api_users_list
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+          description: ''
+    post:
+      operationId: api_users_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/vehicles/:
+    get:
+      operationId: api_vehicles_list
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Vehicles'
+          description: ''
+    post:
+      operationId: api_vehicles_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vehicles'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Vehicles'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Vehicles'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehicles'
+          description: ''
+  /api/vehicles/{vehicle_id}/:
+    get:
+      operationId: api_vehicles_retrieve
+      parameters:
+      - in: path
+        name: vehicle_id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this vehicles.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VehicleDetails'
+          description: ''
+    put:
+      operationId: api_vehicles_update
+      parameters:
+      - in: path
+        name: vehicle_id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this vehicles.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VehicleDetails'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VehicleDetails'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VehicleDetails'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VehicleDetails'
+          description: ''
+    patch:
+      operationId: api_vehicles_partial_update
+      parameters:
+      - in: path
+        name: vehicle_id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this vehicles.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedVehicleDetails'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedVehicleDetails'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedVehicleDetails'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VehicleDetails'
+          description: ''
+    delete:
+      operationId: api_vehicles_destroy
+      parameters:
+      - in: path
+        name: vehicle_id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this vehicles.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+components:
+  schemas:
+    MyCustomToken:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - password
+      - username
+    PatchedVehicleDetails:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        user:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+        name:
+          type: string
+          maxLength: 127
+        brand:
+          type: string
+          maxLength: 127
+        model:
+          type: string
+          maxLength: 127
+        image:
+          type: string
+          maxLength: 127
+        price:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        password:
+          type: string
+          writeOnly: true
+          maxLength: 127
+        email:
+          type: string
+          maxLength: 127
+      required:
+      - email
+      - id
+      - password
+      - username
+    VehicleDetails:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        user:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+        name:
+          type: string
+          maxLength: 127
+        brand:
+          type: string
+          maxLength: 127
+        model:
+          type: string
+          maxLength: 127
+        image:
+          type: string
+          maxLength: 127
+        price:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+      required:
+      - brand
+      - id
+      - image
+      - model
+      - name
+      - price
+      - user
+    Vehicles:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 127
+        brand:
+          type: string
+          maxLength: 127
+        model:
+          type: string
+          maxLength: 127
+        image:
+          type: string
+          maxLength: 127
+        price:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        user:
+          type: string
+          format: uuid
+          readOnly: true
+      required:
+      - brand
+      - id
+      - image
+      - model
+      - name
+      - price
+      - user
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
