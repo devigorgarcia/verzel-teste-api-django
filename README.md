@@ -144,6 +144,7 @@ POST /api/users/
   "password": "string"
 }
 ```
+Response esperado
 
 ```response
 {
