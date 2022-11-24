@@ -159,7 +159,7 @@ Response esperado
 ### Todos os veículos
 
 ```http
-  GET /api/vehicles/
+GET /api/vehicles/
 ```
 
 #### Retorna todos os veículos
@@ -182,7 +182,7 @@ Response esperado
 ### Um unico veículo
 
 ```http
-  GET /api/vehicles/{vehicle_id}/
+GET /api/vehicles/{vehicle_id}/
 ```
 | Parâmetro   | Tipo       |
 | :---------- | :--------- |
@@ -215,7 +215,7 @@ Todas as rotas listadas é necessario o token de admin
 ### Listar Usuarios
 
 ```http
-  GET /api/users/
+GET /api/users/
 ```
 
 Exemplo de Response:
@@ -231,7 +231,7 @@ Exemplo de Response:
 
 ### Adicionar Veiculo
 ```http
-  POST /api/vehicles/
+POST /api/vehicles/
 ```
 #### Retorna todos os veículos
 Exemplo de Request
@@ -260,7 +260,7 @@ Exemplo de Response
 
 ### Atualizar Veiculo
 ```http
-  PATCH  /api/vehicles/{vehicle_id}/
+PATCH  /api/vehicles/{vehicle_id}/
 ```
 | Parâmetro   | Tipo       |
 | :---------- | :--------- |
@@ -298,7 +298,7 @@ Exemplo de Response
 
 ### Deletar Veiculo
 ```http
-  DELETE  /api/vehicles/{vehicle_id}/
+DELETE  /api/vehicles/{vehicle_id}/
 ```
 | Parâmetro   | Tipo       |
 | :---------- | :--------- |
